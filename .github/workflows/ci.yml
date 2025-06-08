@@ -52,13 +52,11 @@ jobs:
       - name: Run tests with coverage
         run: poetry run pytest --cov=world_builder --cov-report=xml --cov-report=term-missing
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
         with:
-          file: ./coverage.xml
-          flags: unittests
-          name: codecov-umbrella
-          fail_ci_if_error: false
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: SeedyROM/world-builder
 
   pre-commit:
     runs-on: ubuntu-latest
