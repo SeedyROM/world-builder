@@ -1,0 +1,31 @@
+[project]
+name = "world-builder"
+version = "0.1.0"
+description = ""
+authors = [{ name = "Zack Kollar", email = "rallokkcaz@gmail.com" }]
+readme = "README.md"
+requires-python = ">=3.13"
+
+[tool.poetry]
+packages = [{ include = "world_builder", from = "src" }]
+
+[tool.poetry.dependencies]
+typer = { version = "^0.16.0", extras = ["all"] }
+
+[tool.poetry.group.dev.dependencies]
+black = "^25.1.0"
+isort = "^5.12.0"
+pre-commit = "^3.0.0"
+pytest = "^8.4.0"
+pytest-cov = "^6.1.1"
+ruff = "^0.11.13"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+addopts = "--cov=world_builder --cov-report=html --cov-report=term-missing"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
