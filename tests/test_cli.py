@@ -34,6 +34,12 @@ def test_goodbye():
     assert "Goodbye Python!" in result.stdout
 
 
+def test_goodbye_default():
+    result = runner.invoke(app, ["goodbye"])
+    assert result.exit_code == 0
+    assert "Goodbye BBQ Squirrel!" in result.stdout
+
+
 def test_help():
     result = runner.invoke(app, ["--help"])
     assert result.exit_code == 0
