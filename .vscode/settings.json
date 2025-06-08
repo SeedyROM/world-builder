@@ -1,0 +1,15 @@
+{
+  // Use Ruff for Python
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.ruff": "explicit",
+      "source.organizeImports.ruff": "explicit"
+    }
+  },
+
+  // Ruff settings
+  "ruff.enable": true,
+  "ruff.organizeImports": true
+}

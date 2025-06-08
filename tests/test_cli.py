@@ -1,4 +1,5 @@
 from typer.testing import CliRunner
+
 from world_builder.cli import app
 
 runner = CliRunner()

@@ -6,8 +6,15 @@ authors = [{ name = "Zack Kollar", email = "rallokkcaz@gmail.com" }]
 readme = "README.md"
 requires-python = ">=3.13"
 
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
 [tool.poetry]
 packages = [{ include = "world_builder", from = "src" }]
+
+[tool.poetry.scripts]
+world-builder = "world_builder.cli:app"
 
 [tool.poetry.dependencies]
 typer = { version = "^0.16.0", extras = ["all"] }
@@ -25,6 +32,9 @@ python_files = ["test_*.py"]
 python_functions = ["test_*"]
 addopts = "--cov=world_builder --cov-report=html --cov-report=term-missing"
 
-[build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
-build-backend = "poetry.core.masonry.api"
+[tool.ruff]
+line-length = 88
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I"] # Basic linting + import sorting
