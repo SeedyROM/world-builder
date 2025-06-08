@@ -53,7 +53,7 @@ jobs:
         run: poetry run pytest --cov=world_builder --cov-report=xml --cov-report=term-missing
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v5
         with:
           file: ./coverage.xml
           flags: unittests
