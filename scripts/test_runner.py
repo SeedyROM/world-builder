@@ -3,6 +3,11 @@ import sys
 from pytest import main
 
 
+def test_without_coverage():
+    sys.argv = ["pytest"] + sys.argv[1:]
+    main()
+
+
 def test_with_coverage():
     sys.argv = [
         "pytest",

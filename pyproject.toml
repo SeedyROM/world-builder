@@ -15,7 +15,7 @@ packages = [{ include = "world_builder", from = "src" }]
 
 [tool.poetry.scripts]
 world-builder = "world_builder.cli:app"
-test = "pytest:main"
+test = "scripts.test_runner:test_without_coverage"
 test-cov = "scripts.test_runner:test_with_coverage"
 
 [tool.poetry.dependencies]
