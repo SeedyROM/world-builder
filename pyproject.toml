@@ -15,6 +15,8 @@ packages = [{ include = "world_builder", from = "src" }]
 
 [tool.poetry.scripts]
 world-builder = "world_builder.cli:app"
+test = "pytest:main"
+test-cov = "scripts.test_runner:test_with_coverage"
 
 [tool.poetry.dependencies]
 typer = { version = "^0.16.0", extras = ["all"] }
@@ -30,7 +32,6 @@ ruff = "^0.11.13"
 testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_functions = ["test_*"]
-addopts = "--cov=world_builder --cov-report=html --cov-report=term-missing"
 
 [tool.ruff]
 line-length = 88

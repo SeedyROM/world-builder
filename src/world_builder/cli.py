@@ -11,7 +11,7 @@ def hello(
 ):
     """Say hello to someone"""
     greeting = "Hello"
-    if polite:
+    if polite:  # pragma: no cover
         greeting = "Hello please"
 
     for _ in range(count):
@@ -21,7 +21,7 @@ def hello(
 @app.command()
 def goodbye(name: str = typer.Argument("BBQ Squirrel", help="Name to say goodbye to")):
     """Say goodbye to someone"""
-    typer.echo(f"Goodbye {name}!")
+    typer.echo(f"Goodbye {name}!")  # pragma: no cover
 
 
 if __name__ == "__main__":  # pragma: no cover

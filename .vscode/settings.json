@@ -11,5 +11,11 @@
 
   // Ruff settings
   "ruff.enable": true,
-  "ruff.organizeImports": true
+  "ruff.organizeImports": true,
+
+  // Testing settings
+  "python.testing.pytestEnabled": true,
+  "python.testing.pytestArgs": ["tests"],
+  "python.defaultInterpreterPath": ".venv/bin/python",
+  "python.testing.autoTestDiscoverOnSaveEnabled": true
 }
