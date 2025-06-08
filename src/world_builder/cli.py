@@ -19,7 +19,7 @@ def hello(
 
 
 @app.command()
-def goodbye(name: str = typer.Argument("World")):
+def goodbye(name: str = typer.Argument("BBQ Squirrel", help="Name to say goodbye to")):
     """Say goodbye to someone"""
     typer.echo(f"Goodbye {name}!")
 
