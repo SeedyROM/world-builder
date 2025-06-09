@@ -33,7 +33,7 @@ def _print_prompt_usage_helper(prompt: str):
 
     # Print the prompt in a syntax-highlighted format
     pprint("")
-    pprint(Syntax(prompt, "markdown", line_numbers=True))
+    pprint(Syntax(prompt, "markdown", word_wrap=True, line_numbers=True))
     pprint("")
 
     # Copy the prompt to the clipboard
