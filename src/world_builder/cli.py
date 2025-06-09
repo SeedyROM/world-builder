@@ -1,6 +1,6 @@
 import typer
-from result import Err, Ok
 
+from world_builder.errors import Err, Ok
 from world_builder.prompts import PromptErrorType, get_prompt_by_version
 
 app = typer.Typer(help="My awesome CLI tool")
@@ -10,10 +10,10 @@ app = typer.Typer(help="My awesome CLI tool")
 def main(ctx: typer.Context):
     """My awesome CLI tool"""
     if ctx.invoked_subcommand is None:
-        result = get_prompt_by_version("v0.1")
+        result = get_prompt_by_version("v0.1.1")
         match result:
             case Ok(prompt):
-                print(f"Loaded prompt: {prompt[:50]}...")
+                print(f"Loaded prompt: {prompt[:128]}...")
             case Err(error):
                 match error.type:
                     case PromptErrorType.NOT_FOUND:
