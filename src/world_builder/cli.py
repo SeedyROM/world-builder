@@ -11,7 +11,7 @@ app = typer.Typer(
         :earth_africa: :wrench: A CLI for instructing and interpreting
         code corrections and suggestions from LLMs.
     """,
-    rich_markup_mode="rich",  # This enables Rich formatting
+    rich_markup_mode="rich",
 )
 
 

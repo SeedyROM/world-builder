@@ -121,12 +121,15 @@ def get_prompt_by_version(
     It uses the `and_then` method (from `Result`, similar to rust)
     to chain the result of validating the version with the result of loading the prompt
     file and returns the final result, which is either the prompt content or an error.
+    This is encoded as `Result[str, PromptError]`, meaning it can either be
+    a successful result containing the prompt content wrapped in `Ok`,
+    or an error wrapped in `Err` with a specific error type `PromptError`.
 
     When methods share a common error type, you can compose them as such to
     create a more readable and maintainable code flow for more complex operations
     with reliable error handling.
 
-    It's also possible to convert/collude the error types
+    It's also possible to convert/collude the value/error types
     from the first method to the second in the chain (and so on and so forth),
     in this case we keep the same error type for simplicity.
 
