@@ -14,18 +14,21 @@ build-backend = "poetry.core.masonry.api"
 packages = [{ include = "world_builder", from = "src" }]
 
 [tool.poetry.scripts]
-world-builder = "world_builder.cli:app"
+cli = "world_builder.cli:app"
 test = "scripts.test_runner:test_without_coverage"
 test-cov = "scripts.test_runner:test_with_coverage"
 
 [tool.poetry.dependencies]
 typer = { version = "^0.16.0", extras = ["all"] }
+pyperclip = "^1.9.0"
+result = "^0.17.0"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^4.2.0"
 pytest = "^8.4.0"
 pytest-cov = "^6.1.1"
 ruff = "^0.11.13"
+mypy = "^1.16.0"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
