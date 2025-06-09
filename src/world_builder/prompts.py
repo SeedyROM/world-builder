@@ -5,6 +5,8 @@ from world_builder.errors import Err, Error, Ok, Result
 
 
 class PromptErrorType(Enum):
+    """Types of errors that can occur when working with prompts."""
+
     NOT_FOUND = "Prompt not found"
     INVALID_VERSION_VALUE = "Invalid prompt version value"
     INVALID_VERSION = "Invalid prompt version"
@@ -13,10 +15,12 @@ class PromptErrorType(Enum):
 
 
 class PromptVersion(Enum):
+    """Accepted prompt versions."""
+
     V0_1 = "v0.1"
 
 
-# Type alias for convenience
+# PromptError type alias
 PromptError = Error[PromptErrorType]
 
 
@@ -54,9 +58,7 @@ def _validate_and_normalize_version(
 
 def _load_prompt_file(version: str) -> Result[str, PromptError]:
     """Load the prompt file based on the version."""
-    prompt_file_path = Path(__file__).parent / "data" / f"{version}.md"
-
-    print(f"Looking for prompt file at: {prompt_file_path}")
+    prompt_file_path = Path(__file__).parent / "prompts" / f"{version}.md"
 
     if not prompt_file_path.exists():
         return Err(
@@ -91,6 +93,7 @@ def _load_prompt_file(version: str) -> Result[str, PromptError]:
             ).with_context(file_path=str(prompt_file_path), operation="read")
         )
     except Exception as e:
+        # Catch-all for any other exceptions
         return Err(
             Error(
                 type=PromptErrorType.UNKNOWN_ERROR,
