@@ -7,7 +7,9 @@ from result import Err, Ok, Result  # noqa: F401
 
 
 # Updated protocol to work with Python's Enum
-class Errortype(Protocol):
+class ErrorType(Protocol):
+    """Protocol for error types that must be an Enum with a 'value' attribute."""
+
     value: str
 
 

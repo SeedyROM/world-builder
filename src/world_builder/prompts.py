@@ -114,5 +114,23 @@ def get_prompt_by_version(
     """
     Get the prompt content for a specific version.
     Valid versions are defined in the `PromptVersion` enum.
+
+    ### NOTE:
+    **If you've never seen a result method chain before, this is a good example.**
+
+    It uses the `and_then` method (from `Result`, similar to rust)
+    to chain the result of validating the version with the result of loading the prompt
+    file and returns the final result, which is either the prompt content or an error.
+
+    When methods share a common error type, you can compose them as such to
+    create a more readable and maintainable code flow for more complex operations
+    with reliable error handling.
+
+    It's also possible to convert/collude the error types
+    from the first method to the second in the chain (and so on and so forth),
+    in this case we keep the same error type for simplicity.
+
+    :param version: The version of the prompt to retrieve.
+    :returns: Result containing either the prompt content (Ok) or an error (Err)
     """
     return _validate_and_normalize_version(version).and_then(_load_prompt_file)
