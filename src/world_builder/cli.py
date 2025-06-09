@@ -58,6 +58,8 @@ def _handle_prompt_error(error: PromptError) -> None:
         case _:
             print(f"An unexpected error occurred: {error.source}")
 
+    raise typer.Exit(code=1)
+
 
 @app.callback(invoke_without_command=True)
 def main(ctx: typer.Context):
@@ -73,7 +75,6 @@ def main(ctx: typer.Context):
                 _print_prompt_usage_helper(prompt)
             case Err(error):
                 _handle_prompt_error(error)
-                raise typer.Exit(code=1)
 
         raise typer.Exit()
 
