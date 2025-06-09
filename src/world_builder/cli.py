@@ -8,9 +8,10 @@ from world_builder.prompts import PromptError, PromptErrorType, get_prompt_by_ve
 
 app = typer.Typer(
     help="""
-        A CLI for instructing and interpreting
+        :earth_africa: :wrench: A CLI for instructing and interpreting
         code corrections and suggestions from LLMs.
     """,
+    rich_markup_mode="rich",  # This enables Rich formatting
 )
 
 
@@ -65,9 +66,8 @@ def _handle_prompt_error(error: PromptError) -> None:
 def main(ctx: typer.Context):
     # If no subcommand is invoked, show the default prompt usage
     if ctx.invoked_subcommand is None:
-        # Get the default prompt for version v0.1
-        # TODO(SeedyROM): This needs to be based on the libraries latest version
-        result = get_prompt_by_version("v0.1")
+        # Get the prompt text for the current version since no version is specified
+        result = get_prompt_by_version()
 
         # Handle the result of getting the prompt text
         match result:

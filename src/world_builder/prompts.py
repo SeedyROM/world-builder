@@ -20,6 +20,8 @@ class PromptVersion(Enum):
     V0_1 = "v0.1"
 
 
+CURRENT_VERSION = PromptVersion.V0_1
+
 # PromptError type alias
 PromptError = Error[PromptErrorType]
 
@@ -106,7 +108,9 @@ def _load_prompt_file(version: str) -> Result[str, PromptError]:
         )
 
 
-def get_prompt_by_version(version: str | PromptVersion) -> Result[str, PromptError]:
+def get_prompt_by_version(
+    version: str | PromptVersion = CURRENT_VERSION,
+) -> Result[str, PromptError]:
     """
     Get the prompt content for a specific version.
     Valid versions are defined in the `PromptVersion` enum.
