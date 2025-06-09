@@ -3,12 +3,16 @@ import typer
 from world_builder.errors import Err, Ok
 from world_builder.prompts import PromptErrorType, get_prompt_by_version
 
-app = typer.Typer(help="My awesome CLI tool")
+app = typer.Typer(
+    help="""
+        A CLI for instructing and interpreting
+        code corrections and suggestions from LLMs.
+    """,
+)
 
 
 @app.callback(invoke_without_command=True)
 def main(ctx: typer.Context):
-    """My awesome CLI tool"""
     if ctx.invoked_subcommand is None:
         result = get_prompt_by_version("v0.1.1")
         match result:
