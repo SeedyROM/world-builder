@@ -14,7 +14,6 @@ class PromptErrorType(Enum):
 
 class PromptVersion(Enum):
     V0_1 = "v0.1"
-    V0_1_1 = "v0.1.1"
 
 
 # Type alias for convenience
@@ -105,4 +104,8 @@ def _load_prompt_file(version: str) -> Result[str, PromptError]:
 
 
 def get_prompt_by_version(version: str | PromptVersion) -> Result[str, PromptError]:
+    """
+    Get the prompt content for a specific version.
+    Valid versions are defined in the `PromptVersion` enum.
+    """
     return _validate_and_normalize_version(version).and_then(_load_prompt_file)
