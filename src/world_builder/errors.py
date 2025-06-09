@@ -5,7 +5,7 @@ from typing import Any, Dict, Generic, Optional, TypeVar
 # Re-export result types for convenience
 from result import Err, Ok, Result  # noqa: F401
 
-# Alternative: Just use Enum directly as the bound
+# Generic type for error enums
 E = TypeVar("E", bound=Enum)  # Change this line
 
 
