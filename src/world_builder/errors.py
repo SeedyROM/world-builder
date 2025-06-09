@@ -1,17 +1,9 @@
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, Generic, Optional, Protocol, TypeVar
+from typing import Any, Dict, Generic, Optional, TypeVar
 
 # Re-export result types for convenience
 from result import Err, Ok, Result  # noqa: F401
-
-
-# Updated protocol to work with Python's Enum
-class ErrorType(Protocol):
-    """Protocol for error types that must be an Enum with a 'value' attribute."""
-
-    value: str
-
 
 # Alternative: Just use Enum directly as the bound
 E = TypeVar("E", bound=Enum)  # Change this line
