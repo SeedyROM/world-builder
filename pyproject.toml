@@ -17,6 +17,7 @@ packages = [{ include = "world_builder", from = "src" }]
 cli = "world_builder.cli:app"
 test = "scripts.test_runner:test_without_coverage"
 test-cov = "scripts.test_runner:test_with_coverage"
+test-cov-ci = "scripts.test_runner:test_with_ci_coverage"
 
 [tool.poetry.dependencies]
 typer = { version = "^0.16.0", extras = ["all"] }

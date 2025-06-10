@@ -50,7 +50,7 @@ jobs:
         run: poetry run ruff format --check .
 
       - name: Run tests with coverage
-        run: poetry run pytest --cov=world_builder --cov-report=xml --cov-report=term-missing
+        run: poetry run test-cov-ci
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
