@@ -1,11 +1,7 @@
 # 🌎 World Builder
 
-[![CI](https://github.com/SeedyROM/world-builder/workflows/CI/badge.svg)](https://github.com/SeedyROM/world-builder/actions)
-[![codecov](https://codecov.io/gh/SeedyROM/world-builder/branch/main/graph/badge.svg)](https://codecov.io/gh/SeedyROM/world-builder)
-
-**Coverage and CI are currently broken as I'm shifting focus to the real purpose of this tool.**
-
-*The initial setup validates their correctness and ensures the CI workflows are correctly configured.*
+[![ci](https://github.com/SeedyROM/world-builder/workflows/CI/badge.svg)](https://github.com/SeedyROM/world-builder/actions)
+[![coverage](https://codecov.io/gh/SeedyROM/world-builder/branch/main/graph/badge.svg)](https://codecov.io/gh/SeedyROM/world-builder)
 
 ## What is this?
 
