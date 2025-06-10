@@ -6,7 +6,7 @@ from typing import Any, Dict, Generic, Optional, TypeVar
 from result import Err, Ok, Result  # noqa: F401
 
 # Generic type for error enums
-E = TypeVar("E", bound=Enum)  # Change this line
+E = TypeVar("E", bound=Enum)
 
 
 @dataclass
