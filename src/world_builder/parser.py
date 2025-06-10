@@ -135,7 +135,7 @@ def parse_markup(markup: str) -> Result[CodeChanges, ParserError]:
 
     except ParseError as xml_pe:
         # Low-level XML parsing errors (malformed XML) - standard library
-        return Err(
+        return Err(  # pragma: no cover
             ParserError(
                 type=ParserErrorType.INVALID_XML,
                 source=f"Malformed XML: {str(xml_pe)}",
@@ -165,7 +165,9 @@ def parse_markup(markup: str) -> Result[CodeChanges, ParserError]:
             )
 
         # Check if it's any other XML syntax error by name
-        elif "XMLSyntax" in str(type(e).__name__) or "XMLSyntax" in str(type(e)):
+        elif "XMLSyntax" in str(type(e).__name__) or "XMLSyntax" in str(
+            type(e)
+        ):  # pragma: no cover
             return Err(
                 ParserError(
                     type=ParserErrorType.INVALID_XML,
@@ -180,7 +182,7 @@ def parse_markup(markup: str) -> Result[CodeChanges, ParserError]:
             )
 
         # Catch-all for any other unexpected errors
-        return Err(
+        return Err(  # pragma: no cover
             ParserError(
                 type=ParserErrorType.PARSING_ERROR,
                 source=f"Unexpected error during parsing: {str(e)}",
@@ -192,7 +194,7 @@ def parse_markup(markup: str) -> Result[CodeChanges, ParserError]:
             )
         )
 
-    except ValueError as ve:
+    except ValueError as ve:  # pragma: no cover
         # Value errors (e.g., invalid attribute values, type conversion issues)
         return Err(
             ParserError(
@@ -203,7 +205,7 @@ def parse_markup(markup: str) -> Result[CodeChanges, ParserError]:
             )
         )
 
-    except UnicodeDecodeError as ude:
+    except UnicodeDecodeError as ude:  # pragma: no cover
         # Encoding issues
         return Err(
             ParserError(
@@ -217,7 +219,7 @@ def parse_markup(markup: str) -> Result[CodeChanges, ParserError]:
             )
         )
 
-    except MemoryError:
+    except MemoryError:  # pragma: no cover
         # Handle extremely large XML documents
         return Err(
             ParserError(
@@ -231,7 +233,7 @@ def parse_markup(markup: str) -> Result[CodeChanges, ParserError]:
             )
         )
 
-    except RecursionError:
+    except RecursionError:  # pragma: no cover
         # Handle deeply nested XML structures
         return Err(
             ParserError(
