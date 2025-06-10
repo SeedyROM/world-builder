@@ -72,8 +72,46 @@ class TestCLI:
         # Verify that pyperclip.copy was called with the prompt
         mock_copy.assert_called_once_with(test_prompt)
 
-        # Verify that pprint was called multiple times (for different messages)
-        assert mock_pprint.call_count >= 5  # Multiple print statements
+        # Verify specific output messages are printed
+        call_args_list = [call[0][0] for call in mock_pprint.call_args_list]
+
+        # Check for key message components
+        assert any(
+            "forgot a command" in str(arg) and "first time" in str(arg)
+            for arg in call_args_list
+        ), "Should print first-time usage message"
+
+        assert any(
+            "README" in str(arg) and "more information" in str(arg)
+            for arg in call_args_list
+        ), "Should print README reference"
+
+        assert any(
+            "get started" in str(arg) and "prompt an LLM" in str(arg)
+            for arg in call_args_list
+        ), "Should print getting started message"
+
+        assert any(
+            "clipboard" in str(arg) and "copied" in str(arg) for arg in call_args_list
+        ), "Should print clipboard confirmation"
+
+        # Verify that a Syntax object (for code highlighting) was printed
+        from rich.syntax import Syntax
+
+        syntax_calls = [
+            call
+            for call in mock_pprint.call_args_list
+            if call[0] and isinstance(call[0][0], Syntax)
+        ]
+        assert len(syntax_calls) == 1, (
+            "Should print exactly one syntax-highlighted prompt"
+        )
+
+        # Verify the syntax object contains our test prompt
+        syntax_obj = syntax_calls[0][0][0]
+        assert syntax_obj.code == test_prompt, (
+            "Syntax object should contain the test prompt"
+        )
 
     def test_handle_prompt_error_not_found(self):
         """Test _handle_prompt_error for NOT_FOUND error type."""
