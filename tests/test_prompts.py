@@ -1,59 +1,44 @@
 from world_builder.prompts import ParserErrorType, parse_prompt_result
 
-TEST_MARKUP = """
-<code-change>
-    <summary>
-        [Brief overview of all changes being made]
-    </summary>
-
-    <files-to-change>
-        <file name="path/to/file1.ext" />
-        <file name="path/to/file2.ext" />
-        <file name="path/to/file3.ext" />
-    </files-to-change>
-
-    <changes>
-        <change file-name="path/to/file1.ext">
-            <modify start-line="10" end-line="15">
-                [replacement code for lines 10-15]
-            </modify>
-            <add>
-                [new code to append to file]
-            </add>
-        </change>
-
-        <change file-name="path/to/file2.ext">
-            <add>
-                [complete new file content]
-            </add>
-        </change>
-
-        <change file-name="path/to/file3.ext">
-            <delete />
-        </change>
-    </changes>
-
-    <additional-steps>
-        <step>npm install new-package</step>
-        <step>Update configuration file</step>
-    </additional-steps>
-
-    <verification>
-        <step>Run tests to verify login functionality</step>
-        <step>Check database connections are pooled</step>
-    </verification>
-</code-change>
-"""
-
 
 class TestPromptParsing:
     def test_parse_prompt_result_function_success(self):
         """Test the parse_prompt_result function with valid input."""
-        result = parse_prompt_result(TEST_MARKUP)
+        result = parse_prompt_result(
+            """
+            <code-change>
+                <summary>Test summary</summary>
+                <files-to-change>
+                    <file name="test1.py" />
+                    <file name="test2.py" />
+                    <file name="test3.py" />
+                </files-to-change>
+                <changes>
+                    <change file-name="test1.py">
+                        <modify start-line="1" end-line="5">Modified content</modify>
+                    </change>
+                    <change file-name="test2.py">
+                        <add>New content</add>
+                    </change>
+                    <change file-name="test3.py">
+                        <delete />
+                    </change>
+                </changes>
+                <additional-steps>
+                    <step>Run migration</step>
+                    <step>Update documentation</step>
+                </additional-steps>
+                <verification>
+                    <step>Run tests</step>
+                    <step>Check logs</step>
+                </verification>
+            </code-change>
+            """
+        )
 
         assert result.is_ok()
         code_change = result.unwrap()
-        assert code_change.summary == "[Brief overview of all changes being made]"
+        assert code_change.summary == "Test summary"
         assert len(code_change.files_to_change) == 3
 
     def test_parse_prompt_result_empty_input(self):

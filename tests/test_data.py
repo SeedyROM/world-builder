@@ -1,6 +1,6 @@
 from world_builder.data import CodeChanges
 
-TEST_MARKUP = """
+EXAMPLE_XML = """
 <code-change>
     <summary>
         [Brief overview of all changes being made]
@@ -50,7 +50,7 @@ class TestDataDeserialization:
     def test_deserialize_code_change(self):
         """Test parsing a complete code change XML structure."""
         # Parse the XML markup
-        code_change = CodeChanges.from_xml(TEST_MARKUP)
+        code_change = CodeChanges.from_xml(EXAMPLE_XML)
 
         # Check the summary
         assert code_change.summary == "[Brief overview of all changes being made]"
@@ -267,7 +267,7 @@ class TestDataDeserialization:
     def test_serialization_roundtrip(self):
         """Test that parsing and serializing produces equivalent results."""
         # Parse the original markup
-        original_code_change = CodeChanges.from_xml(TEST_MARKUP)
+        original_code_change = CodeChanges.from_xml(EXAMPLE_XML)
 
         # Serialize back to XML
         serialized_xml = original_code_change.to_xml(pretty_print=True)
