@@ -1,6 +1,12 @@
 from enum import Enum
 from pathlib import Path
+from xml.etree.ElementTree import ParseError
 
+from lxml.etree import XMLSyntaxError
+from pydantic import ValidationError
+from pydantic_xml import ParsingError
+
+from world_builder.data import CodeChanges
 from world_builder.errors import Err, Error, Ok, Result
 
 
@@ -14,6 +20,18 @@ class PromptErrorType(Enum):
     UNKNOWN_ERROR = "An unknown error occurred"
 
 
+class ParserErrorType(Enum):
+    """Error types for parsing the prompt result."""
+
+    INVALID_XML = "Invalid XML format"
+    MISSING_ELEMENT = "Required element is missing"
+    PARSING_ERROR = "Error parsing XML"
+
+
+PromptError = Error[PromptErrorType]
+ParserError = Error[ParserErrorType]
+
+
 class PromptVersion(Enum):
     """Accepted prompt versions."""
 
@@ -21,9 +39,6 @@ class PromptVersion(Enum):
 
 
 CURRENT_VERSION = PromptVersion.V0_1
-
-# PromptError type alias
-PromptError = Error[PromptErrorType]
 
 
 def _validate_and_normalize_version(
@@ -137,3 +152,85 @@ def get_prompt_by_version(
     :returns: Result containing either the prompt content (Ok) or an error (Err)
     """
     return _validate_and_normalize_version(version).and_then(_load_prompt_file)
+
+
+def parse_prompt_result(markup: str) -> Result[CodeChanges, ParserError]:
+    """
+    Parse the provided XML markup into a CodeChanges object.
+
+    :params markup: The XML markup to parse.
+    :returns: Result containing either the parsed CodeChanges object (Ok)
+              or a ParserError (Err) with detailed context.
+    """
+    # Validate input
+    if not markup or not markup.strip():
+        return Err(
+            ParserError(
+                type=ParserErrorType.INVALID_XML,
+                source="Empty or whitespace-only markup provided",
+            ).with_context(markup=markup, operation="input_validation")
+        )
+
+    try:
+        code_changes = CodeChanges.from_xml(markup)
+        return Ok(code_changes)
+
+    except ParsingError as pe:
+        # pydantic-xml specific parsing errors
+        return Err(
+            ParserError(
+                type=ParserErrorType.MISSING_ELEMENT,
+                source=f"XML structure error: {str(pe)}",
+            ).with_context(
+                markup=markup,
+                operation="xml_structure_parsing",
+                error_type="ParsingError",
+            )
+        )
+
+    except ValidationError as ve:
+        # Pydantic validation errors
+        error_details = []
+        for error in ve.errors():
+            loc = " -> ".join(str(x) for x in error["loc"]) if error["loc"] else "root"
+            error_details.append(f"{loc}: {error['msg']}")
+
+        return Err(
+            ParserError(
+                type=ParserErrorType.PARSING_ERROR,
+                source=f"Validation failed: {'; '.join(error_details)}",
+            ).with_context(
+                markup=markup,
+                operation="validation",
+                error_type="ValidationError",
+                error_count=len(ve.errors()),
+            )
+        )
+
+    except (ParseError, XMLSyntaxError) as xml_error:
+        # Handle both standard library and lxml XML parsing errors
+        return Err(
+            ParserError(
+                type=ParserErrorType.INVALID_XML,
+                source=f"Malformed XML: {str(xml_error)}",
+            ).with_context(
+                markup=markup,
+                operation="xml_parsing",
+                error_type=type(xml_error).__name__,
+                line_number=getattr(xml_error, "lineno", None),
+                column=getattr(xml_error, "offset", None),
+            )
+        )
+
+    except Exception as e:  # pragma: no cover
+        # Catch-all for any other unexpected errors
+        return Err(
+            ParserError(
+                type=ParserErrorType.PARSING_ERROR,
+                source=f"Unexpected error during parsing: {str(e)}",
+            ).with_context(
+                markup=markup,
+                operation="general_parsing",
+                error_type=type(e).__name__,
+            )
+        )

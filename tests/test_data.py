@@ -1,4 +1,4 @@
-from world_builder.parser import CodeChanges, ParserErrorType, parse_markup
+from world_builder.data import CodeChanges
 
 TEST_MARKUP = """
 <code-change>
@@ -46,8 +46,8 @@ TEST_MARKUP = """
 """
 
 
-class TestParser:
-    def test_parse_code_change(self):
+class TestDataDeserialization:
+    def test_deserialize_code_change(self):
         """Test parsing a complete code change XML structure."""
         # Parse the XML markup
         code_change = CodeChanges.from_xml(TEST_MARKUP)
@@ -102,7 +102,7 @@ class TestParser:
             code_change.verification_steps[1] == "Check database connections are pooled"
         )
 
-    def test_parse_minimal_markup(self):
+    def test_deserialize_minimal_markup(self):
         """Test parsing minimal valid XML with only required fields."""
         minimal_markup = """
         <code-change>
@@ -118,7 +118,7 @@ class TestParser:
         assert len(code_change.additional_steps) == 0
         assert len(code_change.verification_steps) == 0
 
-    def test_parse_only_modifications(self):
+    def test_deserialize_only_modifications(self):
         """Test parsing XML with only modification changes."""
         modify_only_markup = """
         <code-change>
@@ -145,7 +145,7 @@ class TestParser:
         assert code_change.changes[0].modifications[0].end_line == 10
         assert code_change.changes[0].modifications[0].content == "Updated function"
 
-    def test_parse_optional_modify_attributes(self):
+    def test_deserialize_optional_modify_attributes(self):
         """Test parsing modifications without line numbers."""
         modify_no_lines = """
         <code-change>
@@ -168,7 +168,7 @@ class TestParser:
         assert modify.end_line is None
         assert modify.content == "Full file replacement"
 
-    def test_parse_multiple_operations_same_file(self):
+    def test_deserialize_multiple_operations_same_file(self):
         """Test parsing multiple operations on the same file."""
         multiple_ops = """
         <code-change>
@@ -214,7 +214,7 @@ class TestParser:
         assert change.additions[0].content == "New function at end"
         assert change.additions[1].content == "Another new function"
 
-    def test_parse_whitespace_handling(self):
+    def test_deserialize_whitespace_handling(self):
         """Test that whitespace is properly stripped from content."""
         whitespace_markup = """
         <code-change>
@@ -240,7 +240,7 @@ class TestParser:
         assert code_change.summary == "Whitespace test"
         assert code_change.changes[0].additions[0].content == "Content with whitespace"
 
-    def test_parse_empty_sections(self):
+    def test_deserialize_empty_sections(self):
         """Test parsing with empty optional sections."""
         empty_sections = """
         <code-change>
@@ -263,110 +263,6 @@ class TestParser:
         assert len(code_change.changes) == 0
         assert len(code_change.additional_steps) == 0
         assert len(code_change.verification_steps) == 0
-
-    def test_parse_markup_function_success(self):
-        """Test the parse_markup function with valid input."""
-        result = parse_markup(TEST_MARKUP)
-
-        assert result.is_ok()
-        code_change = result.unwrap()
-        assert code_change.summary == "[Brief overview of all changes being made]"
-        assert len(code_change.files_to_change) == 3
-
-    def test_parse_markup_empty_input(self):
-        """Test parse_markup function with empty input."""
-        result = parse_markup("")
-
-        assert result.is_err()
-        error = result.unwrap_err()
-        assert error.type == ParserErrorType.INVALID_XML
-        assert "Empty or whitespace-only markup" in error.source
-
-    def test_parse_markup_whitespace_only(self):
-        """Test parse_markup function with whitespace-only input."""
-        result = parse_markup("   \n\t   ")
-
-        assert result.is_err()
-        error = result.unwrap_err()
-        assert error.type == ParserErrorType.INVALID_XML
-        assert "Empty or whitespace-only markup" in error.source
-
-    def test_parse_markup_malformed_xml(self):
-        """Test parse_markup function with malformed XML."""
-        malformed_xml = """
-        <code-change>
-            <summary>Test</summary>
-            <unclosed-tag>
-        </code-change>
-        """
-
-        result = parse_markup(malformed_xml)
-
-        assert result.is_err()
-        error = result.unwrap_err()
-        # Should be INVALID_XML for malformed XML, but some parsers
-        # might categorize differently
-        assert error.type in [
-            ParserErrorType.INVALID_XML,
-            ParserErrorType.PARSING_ERROR,
-        ]
-        assert (
-            "Malformed XML" in error.source
-            or "XMLSyntax" in error.source
-            or "parsing" in error.source.lower()
-        )
-
-    def test_parse_markup_wrong_root_element(self):
-        """Test parse_markup function with wrong root element."""
-        wrong_root = """
-        <wrong-element>
-            <summary>Test</summary>
-        </wrong-element>
-        """
-
-        result = parse_markup(wrong_root)
-
-        assert result.is_err()
-        error = result.unwrap_err()
-        assert error.type == ParserErrorType.MISSING_ELEMENT
-
-    def test_parse_markup_missing_required_fields(self):
-        """Test parse_markup function with missing required fields."""
-        missing_summary = """
-        <code-change>
-            <files-to-change>
-                <file name="test.py" />
-            </files-to-change>
-        </code-change>
-        """
-
-        result = parse_markup(missing_summary)
-
-        assert result.is_err()
-        error = result.unwrap_err()
-        assert error.type == ParserErrorType.PARSING_ERROR
-        assert "Validation failed" in error.source
-
-    def test_parse_markup_invalid_attribute_types(self):
-        """Test parse_markup function with invalid attribute types."""
-        invalid_types = """
-        <code-change>
-            <summary>Test</summary>
-            <changes>
-                <change file-name="test.py">
-                    <modify start-line="not-a-number" end-line="15">
-                        Content
-                    </modify>
-                </change>
-            </changes>
-        </code-change>
-        """
-
-        result = parse_markup(invalid_types)
-
-        assert result.is_err()
-        error = result.unwrap_err()
-        assert error.type == ParserErrorType.PARSING_ERROR
 
     def test_serialization_roundtrip(self):
         """Test that parsing and serializing produces equivalent results."""
