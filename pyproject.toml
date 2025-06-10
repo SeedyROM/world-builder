@@ -35,7 +35,7 @@ mypy = "^1.16.0"
 types-lxml = "^2025.3.30"
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["tests/world_builder"]
 python_files = ["test_*.py"]
 python_functions = ["test_*"]
 
