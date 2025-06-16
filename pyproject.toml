@@ -29,7 +29,7 @@ lxml = "^5.4.0"
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^4.2.0"
 pytest = "^8.4.0"
-pytest-cov = "^6.1.1"
+pytest-cov = "^6.2.1"
 ruff = "^0.11.13"
 mypy = "^1.16.0"
 types-lxml = "^2025.3.30"
