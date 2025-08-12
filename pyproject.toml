@@ -27,7 +27,7 @@ pydantic-xml = { version = "^2.17.0", extras = ["lxml"] }
 lxml = "^5.4.0"
 
 [tool.poetry.group.dev.dependencies]
-pre-commit = "^4.2.0"
+pre-commit = "^4.3.0"
 pytest = "^8.4.0"
 pytest-cov = "^6.1.1"
 ruff = "^0.11.13"
